@@ -1,11 +1,21 @@
 package com.example.taskmanager.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 /*
  * Validations ensure only correct data
  * enters the backend system.
+ */
+/*
+ * UserRequestDto
+ * ----------------
+ * This DTO represents the data that the CLIENT sends to the server
+ * while creating a user.
+ *
+ * IMPORTANT:
+ * - No id here (client should not send id)
+ * - Only fields that client is allowed to provide
  */
 
 public class UserRequestDto {

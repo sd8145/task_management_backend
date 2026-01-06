@@ -4,9 +4,13 @@ import com.example.taskmanager.dto.UserRequestDto;
 import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.service.UserService;
 
+import jakarta.validation.Valid;
+import com.example.taskmanager.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import com.example.taskmanager.dto.TaskResponseDto;
 
 /*
  * UserController
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * Does NOT contain business logic.
  */
 
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,10 +27,14 @@ public class UserController {
     private final UserService userService;
 
     // Constructor Injection
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+  private final TaskService taskService;   // ✅ ADD THIS
 
+    // Constructor Injection
+    public UserController(UserService userService,
+                          TaskService taskService) { // ✅ ADD THIS
+        this.userService = userService;
+        this.taskService = taskService;
+    }
     /*
      * POST /users
      * - Accepts UserRequestDto
@@ -49,7 +58,7 @@ Java
      */
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
-            @RequestBody UserRequestDto dto) {
+             @Valid @RequestBody UserRequestDto dto) {
 
         UserResponseDto response = userService.createUser(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -64,4 +73,11 @@ Java
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
+   
+@GetMapping("/{id}/tasks")
+public ResponseEntity<List<TaskResponseDto>> getUserTasks(
+        @PathVariable Long id) {
+    return ResponseEntity.ok(taskService.getTasksByUserId(id));
+}
+
 }

@@ -4,6 +4,10 @@ import com.example.taskmanager.dto.TaskRequestDto;
 import com.example.taskmanager.dto.TaskResponseDto;
 import com.example.taskmanager.service.TaskService;
 
+import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +36,7 @@ public class TaskController {
      */
     @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(
-            @RequestBody TaskRequestDto dto) {
+           @Valid @RequestBody TaskRequestDto dto) {
 
         TaskResponseDto response = taskService.createTask(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -54,4 +58,9 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/all")
+public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
+    return ResponseEntity.ok(taskService.getAllTasks());
+}
+
 }
